@@ -276,7 +276,10 @@ int tuxtxt_run_ui(int pid, int demux)
 #endif
 		return 0;
 	}
-	
+
+	/* Workaround for Gigablue Quad (Plus) */
+	usleep(100000);
+
 	/* main loop */
 	do {
 		if (GetRCCode() == 1)
