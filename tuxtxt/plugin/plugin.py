@@ -3,6 +3,8 @@ from Screens.Screen import Screen
 from Plugins.Plugin import PluginDescriptor
 from Components.ActionMap import NumberActionMap
 from Screens.PictureInPicture import PipPigMode
+from Components.SystemInfo import SystemInfo
+from Components.config import config
 
 
 class RcCode:
@@ -40,6 +42,10 @@ class ShellStarter(Screen):
 		</screen>"""
 
 	def __init__(self, session, args=None):
+		try: # new config.osd.alpha_teletext may not be available everywhere
+			self.setOSDAlpha(config.osd.alpha_teletext)
+		except:
+			pass
 		self.skin = ShellStarter.skin
 		Screen.__init__(self, session)
 		self.session = session
@@ -83,6 +89,10 @@ class ShellStarter(Screen):
 		PipPigMode(False)
 		if hasattr(self.session, "pip"):
 			self.session.pip.relocate()
+		try: # config.osd.alpha may not be available everywhere
+			self.setOSDAlpha(config.osd.alpha)
+		except:
+			pass
 		self.close()
 
 	def handleNumberKey(self, key):
@@ -132,6 +142,14 @@ class ShellStarter(Screen):
 
 	def handleKeyExit(self):
 		eTuxtxtApp.getInstance().handleKey(RcCode.RC_HOME)
+
+	def setOSDAlpha(self,configElement):
+		if SystemInfo["CanChangeOsdAlpha"]:
+			#print 'Tuxtxt setting OSD alpha:', str(configElement.value)
+			config.av.osd_alpha.setValue(configElement.value)
+			f = open("/proc/stb/video/alpha", "w")
+			f.write(str(configElement.value))
+			f.close()
 
 
 def main(session, **kwargs):
