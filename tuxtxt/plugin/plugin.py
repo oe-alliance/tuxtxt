@@ -46,6 +46,12 @@ class ShellStarter(Screen):
 			self.setOSDAlpha(config.osd.alpha_teletext)
 		except:
 			pass
+		try:
+			from Components.UsageConfig import patchTuxtxtConfFile
+			if config.usage.tuxtxt_ConfFileHasBeenPatched.value == False:
+				patchTuxtxtConfFile(config.usage.tuxtxt_ConfFileHasBeenPatched)
+		except:
+			pass
 		self.skin = ShellStarter.skin
 		Screen.__init__(self, session)
 		self.session = session
