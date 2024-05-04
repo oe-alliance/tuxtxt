@@ -4185,12 +4185,12 @@ void tuxtxt_setfontwidth(tstRenderInfo* renderinfo,int newwidth)
 }
 void tuxtxt_ClearBB(tstRenderInfo* renderinfo,int color)
 {
-	tuxtxt_FillRect(renderinfo->lfb,renderinfo->fix_screeninfo.line_length,0, renderinfo->var_screeninfo.yres - renderinfo->var_screeninfo.yoffset, renderinfo->fix_screeninfo.line_length, renderinfo->var_screeninfo.yres, color);
+	tuxtxt_FillRect(renderinfo->lfb,renderinfo->fix_screeninfo.line_length,0, renderinfo->var_screeninfo.yres - renderinfo->var_screeninfo.yoffset, renderinfo->var_screeninfo.xres, renderinfo->var_screeninfo.yres, color);
 }
 
 void tuxtxt_ClearFB(tstRenderInfo* renderinfo,int color)
 {
-	tuxtxt_FillRect(renderinfo->lfb,renderinfo->fix_screeninfo.line_length,0, renderinfo->var_screeninfo.yoffset, renderinfo->fix_screeninfo.line_length, renderinfo->var_screeninfo.yres, color);
+	tuxtxt_FillRect(renderinfo->lfb,renderinfo->fix_screeninfo.line_length,0, renderinfo->var_screeninfo.yoffset, renderinfo->var_screeninfo.xres, renderinfo->var_screeninfo.yres, color);
 }
 
 int  tuxtxt_GetCurFontWidth(tstRenderInfo* renderinfo)
