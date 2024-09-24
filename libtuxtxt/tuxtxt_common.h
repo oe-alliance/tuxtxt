@@ -62,16 +62,16 @@ tstPageAttr tuxtxt_atrtable[] =
 	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MSGDRM3 */
 	{ tuxtxt_color_menu1  , tuxtxt_color_blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL0 5a Z */
 	{ tuxtxt_color_white  , tuxtxt_color_blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL1 58 X */
-	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b › */
-	{ tuxtxt_color_menu2  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab « */
-	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 ¤ */
-	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b › */
-	{ tuxtxt_color_menu2  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb Ë */
-	{ tuxtxt_color_cyan   , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 Ç */
-	{ tuxtxt_color_white  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 È */
-	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 ¨ */
-	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 ¤ */
-	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 ¨ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b Ãµ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab Â´ */
+	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 Â§ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b Ãµ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb Ã€ */
+	{ tuxtxt_color_cyan   , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 Â« */
+	{ tuxtxt_color_white  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 Â» */
+	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 Â® */
+	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 Â§ */
+	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 Â® */
 };
 
 // G2 Set as defined in ETS 300 706
@@ -1216,9 +1216,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 		if (readcnt != sizeof(pes_packet))
 		{
-#if DEBUG
-			printf ("TuxTxt: readerror\n");
-#endif
+			if (tuxtxt_cache.debug)
+				printf ("TuxTxt: readerror\n");
 			continue;
 		}
 
@@ -1244,9 +1243,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 				if (b1 == 0xFF || b2 == 0xFF)
 				{
-#if DEBUG
-					printf("TuxTxt <Biterror in Packet>\n");
-#endif
+					if (tuxtxt_cache.debug)
+						printf("TuxTxt <Biterror in Packet>\n");
 					continue;
 				}
 
@@ -1273,9 +1271,8 @@ void *tuxtxt_CacheThread(void *arg)
 					if (b2 == 0xFF || b3 == 0xFF)
 					{
 						tuxtxt_cache.current_page[magazine] = tuxtxt_cache.page_receiving = -1;
-#if DEBUG
-						printf("TuxTxt <Biterror in Page>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in Page>\n");
 						continue;
 					}
 
@@ -1295,9 +1292,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 					if (b1 == 0xFF || b2 == 0xFF || b3 == 0xFF || b4 == 0xFF)
 					{
-#if DEBUG
-						printf("TuxTxt <Biterror in SubPage>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in SubPage>\n");
 						tuxtxt_cache.current_subpage[magazine] = -1;
 						continue;
 					}
@@ -1354,9 +1350,8 @@ void *tuxtxt_CacheThread(void *arg)
 					b1 = dehamming[vtxt_row[9]];
 					if (b1 == 0xFF)
 					{
-#if DEBUG
-						printf("TuxTxt <Biterror in CountryFlags>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in CountryFlags>\n");
 					}
 					else
 					{
@@ -1436,9 +1431,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p27>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p27>\n");
 							continue;
 						}
 						if (descode == 0) // reading FLOF-Pagelinks
@@ -1526,9 +1520,8 @@ void *tuxtxt_CacheThread(void *arg)
 								int d2 = deh24(&vtxt_row[6*i + 6]);
 								if (d1 < 0 || d2 < 0)
 								{
-#if DEBUG
-									printf("TuxTxt <Biterror in p27/4-5>\n");
-#endif
+									if (tuxtxt_cache.debug)
+										printf("TuxTxt <Biterror in p27/4-5>\n");
 									continue;
 								}
 								p->local = i & 0x01;
@@ -1571,9 +1564,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p26>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p26>\n");
 							continue;
 						}
 						if (!pageinfo_thread->ext)
@@ -1607,9 +1599,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p28>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p28>\n");
 							continue;
 						}
 						if (descode != 2)
@@ -4004,12 +3995,12 @@ int tuxtxt_RenderChar(unsigned char *lfb, // pointer to render buffer, min. font
 			tuxtxt_FillRect(lfb,xres,*pPosX + curfontwidth/2, PosY, (curfontwidth+1)/2, fontheight, bgcolor);
 			*pPosX += curfontwidth;
 			return 0;
-		case 0xEA: /* °  */
+		case 0xEA: /* âˆž */
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY, curfontwidth, fontheight, bgcolor);
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY, curfontwidth/2, curfontwidth/2, fgcolor);
 			*pPosX += curfontwidth;
 			return 0;
-		case 0xEB: /* ¬ */
+		case 0xEB: /* Â¨ */
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY +1, curfontwidth, fontheight -1, bgcolor);
 			for (Row=0; Row < curfontwidth/2; Row++)
 				tuxtxt_DrawHLine(lfb,xres,*pPosX + Row, PosY + Row, curfontwidth - Row, fgcolor);

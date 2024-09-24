@@ -77,6 +77,13 @@ int tuxtxt_init()
 	return 1;//tuxtxt_init_demuxer();
 }
 
+void tuxtxt_setdebug(bool debug)
+{
+	if ( tuxtxt_initialized )
+		tuxtxt_cache.debug = debug;
+}
+
+
 /******************************************************************************
  * Interface to caller                                                        *
  ******************************************************************************/
@@ -131,9 +138,8 @@ int tuxtxt_start(int tpid, int demux)
 void tuxtxt_close()
 {
 	pthread_mutex_lock(&tuxtxt_control_lock);
-#if DEBUG
-	printf ("cleaning up\n");
-#endif
+	if(tuxtxt_cache.debug)
+		printf ("cleaning up\n");
 	tuxtxt_stop();
 	if (tuxtxt_cache.dmx != -1)
     	    close(tuxtxt_cache.dmx);
