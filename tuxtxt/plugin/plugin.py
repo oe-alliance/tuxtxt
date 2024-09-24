@@ -3,8 +3,24 @@ from Screens.Screen import Screen
 from Plugins.Plugin import PluginDescriptor
 from Components.ActionMap import NumberActionMap
 from Screens.PictureInPicture import PipPigMode
-from Components.SystemInfo import SystemInfo
 from Components.config import config
+
+try:
+	from enigma import AVControl
+
+	def setOSDAlpha(value):
+		if AVControl.hasOSDAlpha():
+			config.av.osd_alpha.setValue(value)
+			AVControl.setOSDAlpha(value)
+
+except ImportError:
+	from Components.SystemInfo import SystemInfo
+
+	def setOSDAlpha(value):
+		if SystemInfo["CanChangeOsdAlpha"]:
+			config.av.osd_alpha.setValue(value)
+			with open("/proc/stb/video/alpha", "w") as fd:
+				fd.write(str(value))
 
 
 class RcCode:
@@ -42,7 +58,7 @@ class ShellStarter(Screen):
 		</screen>"""
 
 	def __init__(self, session, args=None):
-		try: # new config.osd.alpha_teletext may not be available everywhere
+		try:  # new config.osd.alpha_teletext may not be available everywhere
 			self.setOSDAlpha(config.osd.alpha_teletext)
 		except:
 			pass
@@ -95,7 +111,7 @@ class ShellStarter(Screen):
 		PipPigMode(False)
 		if hasattr(self.session, "pip"):
 			self.session.pip.relocate()
-		try: # config.osd.alpha may not be available everywhere
+		try:  # config.osd.alpha may not be available everywhere
 			self.setOSDAlpha(config.osd.alpha)
 		except:
 			pass
@@ -149,13 +165,8 @@ class ShellStarter(Screen):
 	def handleKeyExit(self):
 		eTuxtxtApp.getInstance().handleKey(RcCode.RC_HOME)
 
-	def setOSDAlpha(self,configElement):
-		if SystemInfo["CanChangeOsdAlpha"]:
-			#print 'Tuxtxt setting OSD alpha:', str(configElement.value)
-			config.av.osd_alpha.setValue(configElement.value)
-			f = open("/proc/stb/video/alpha", "w")
-			f.write(str(configElement.value))
-			f.close()
+	def setOSDAlpha(self, configElement):
+		setOSDAlpha(configElement.value)
 
 
 def main(session, **kwargs):
