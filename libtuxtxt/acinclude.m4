@@ -448,6 +448,8 @@ elif test "$BOXTYPE" = "coolstream"; then
 	AC_DEFINE(HAVE_COOL_HARDWARE, 1, [building for a coolstream])
 elif test "$BOXTYPE" = "generic"; then
 	AC_DEFINE(HAVE_GENERIC_HARDWARE, 1, [building for a generic device like a standard PC])
+elif test "$BOXTYPE" = "xc7362"; then
+	AC_DEFINE(SCREENPATCH, 1, [xc7362])
 fi
 
 # TODO: do we need more defines?
