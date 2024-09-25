@@ -313,6 +313,12 @@ typedef struct
 	int prev_100, prev_10, next_10, next_100;
 	int showhex, showflof,show39, showl25;
 	int fnc_old, saa_old, screen_mode1, screen_mode2,color_mode, trans_mode;
+	struct fb_var_screeninfo saved_var_screeninfo;
+	struct fb_fix_screeninfo saved_fix_screeninfo;
+	unsigned char *saved_fb;
+	int TTFScreenResX; /* screen resolution (720,1280,1920) when using TTF fonts */
+	int TTFBold; /* 1 = bold font (historic default) */
+	int CleanAlgo;
 	signed char clearbbcolor;
 	FT_Library      library;
 	FTC_Manager     manager;
