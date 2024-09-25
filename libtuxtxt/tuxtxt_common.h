@@ -872,9 +872,8 @@ void tuxtxt_decode_btt()
 		b1 = b1<<8 | b2<<4 | b3; /* page number */
 		tuxtxt_cache.adippg[++tuxtxt_cache.maxadippg] = b1;
 	}
-#if DEBUG
-	printf("TuxTxt <BTT decoded>\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt <BTT decoded>\n");
 	tuxtxt_cache.bttok = 1;
 }
 
@@ -937,9 +936,8 @@ void tuxtxt_decode_adip() /* additional information table */
 			}
 		} /* next link j */
 		tuxtxt_cache.adippg[i] = 0; /* completely decoded: clear entry */
-#if DEBUG
-		printf("TuxTxt <ADIP %03x decoded>\n", p);
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <ADIP %03x decoded>\n", p);
 	} /* next adip page i */
 
 	while (!tuxtxt_cache.adippg[tuxtxt_cache.maxadippg] && (tuxtxt_cache.maxadippg >= 0)) /* and shrink table */
@@ -952,7 +950,6 @@ int tuxtxt_GetSubPage(int page, int subpage, int offset)
 {
 	int loop;
 
-
 	for (loop = subpage + offset; loop != subpage; loop += offset)
 	{
 		if (loop < 0)
@@ -964,16 +961,14 @@ int tuxtxt_GetSubPage(int page, int subpage, int offset)
 
 		if (tuxtxt_cache.astCachetable[page][loop])
 		{
-#if DEBUG
-			printf("TuxTxt <NextSubPage: %.3X-%.2X>\n", page, subpage);
-#endif
+			if (tuxtxt_cache.debug)
+				printf("TuxTxt <NextSubPage: %.3X-%.2X>\n", page, subpage);
 			return loop;
 		}
 	}
 
-#if DEBUG
-	printf("TuxTxt <NextSubPage: no other SubPage>\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt <NextSubPage: no other SubPage>\n");
 	return subpage;
 }
 
@@ -1043,9 +1038,8 @@ void tuxtxt_clear_cache()
 	}
 	memset(&tuxtxt_cache.astCachetable, 0, sizeof(tuxtxt_cache.astCachetable));
 	memset(&tuxtxt_cache.astP29, 0, sizeof(tuxtxt_cache.astP29));
-#if DEBUG
-	printf("TuxTxt cache cleared\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt cache cleared\n");
 	pthread_mutex_unlock(&tuxtxt_cache_lock);
 }
 /******************************************************************************
@@ -1067,9 +1061,8 @@ int tuxtxt_init_demuxer()
 		perror("TuxTxt <DMX_SET_BUFFERSIZE>");
 		return 0;
 	}
-#if DEBUG
-	printf("TuxTxt: initialized\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt: initialized\n");
 	/* init successfull */
 
 	return 1;
@@ -1087,9 +1080,8 @@ void tuxtxt_decode_p2829(unsigned char *vtxt_row, tstExtData **ptExtData)
 
 	if (t1 < 0 || t2 < 0)
 	{
-#if DEBUG
-		printf("TuxTxt <Biterror in p28>\n");
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <Biterror in p28>\n");
 		return;
 	}
 
@@ -1125,9 +1117,8 @@ void tuxtxt_decode_p2829(unsigned char *vtxt_row, tstExtData **ptExtData)
 	}
 	if (t2 < 0 || bitsleft != 14)
 	{
-#if DEBUG
-		printf("TuxTxt <Biterror in p28/29 t2=%d b=%d>\n", t2, bitsleft);
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <Biterror in p28/29 t2=%d b=%d>\n", t2, bitsleft);
 		(*ptExtData)->p28Received = 0;
 		return;
 	}
@@ -1200,7 +1191,8 @@ void *tuxtxt_CacheThread(void *arg)
 	unsigned char pagedata[9][23*40];
 	tstPageinfo *pageinfo_thread;
 
-	printf("TuxTxt running thread...(%03x)\n",tuxtxt_cache.vtxtpid);
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt running thread...(%03x)\n",tuxtxt_cache.vtxtpid);
 	tuxtxt_cache.receiving = 1;
 	nice(3);
 	while (1)
@@ -1219,9 +1211,6 @@ void *tuxtxt_CacheThread(void *arg)
 				printf ("TuxTxt: readerror readcnt=%d /pes_packet %d\n",readcnt,sizeof(pes_packet));
 			continue;
 		}
-
-		if (tuxtxt_cache.debug)
-			printf ("TuxTxt: read OK\n");
 
 		/* analyze it */
 		for (line = 0; line < 4; line++)
@@ -1544,7 +1533,8 @@ void *tuxtxt_CacheThread(void *arg)
 								{
 									// workaround for crash on RTL Shop ...
 									// sorry.. i dont understand whats going wrong here :)
-									printf("[TuxTxt] page > 0x899 ... ignore!!!!!!\n");
+									if (tuxtxt_cache.debug)
+										printf("[TuxTxt] page > 0x899 ... ignore!!!!!!\n");
 									continue;
 								}
 								else if (tuxtxt_cache.astCachetable[p->page][0])	/* link valid && linked page cached */
@@ -1716,9 +1706,8 @@ int tuxtxt_start_thread()
 		tuxtxt_cache.thread_id = 0;
 		return 0;
 	}
-#if 1//DEBUG
-	printf("TuxTxt service started %x\n", tuxtxt_cache.vtxtpid);
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt service started %x\n", tuxtxt_cache.vtxtpid);
 	tuxtxt_cache.receiving = 1;
 	tuxtxt_cache.thread_starting = 0;
 	return 1;
@@ -1752,9 +1741,8 @@ int tuxtxt_stop_thread()
 		close(tuxtxt_cache.dmx);
 	}
 	tuxtxt_cache.dmx = -1;
-#if 1//DEBUG
-	printf("TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
 	return 1;
 }
 
