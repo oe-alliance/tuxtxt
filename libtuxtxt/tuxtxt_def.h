@@ -342,7 +342,7 @@ typedef struct
 	char bttok;
 	int adippg[10];
 	int maxadippg;
-	bool debug;
+	int debug;
 	unsigned char basictop[0x900];
 
 	unsigned char  timestring[8];

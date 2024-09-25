@@ -77,10 +77,10 @@ int tuxtxt_init()
 	return 1;//tuxtxt_init_demuxer();
 }
 
-void tuxtxt_setdebug(bool debug)
+void tuxtxt_enabledebug()
 {
 	if ( tuxtxt_initialized )
-		tuxtxt_cache.debug = debug;
+		tuxtxt_cache.debug = 1;
 }
 
 
