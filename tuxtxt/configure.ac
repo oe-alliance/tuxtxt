@@ -10,10 +10,15 @@ AM_PATH_PYTHON
 TUXBOX_APPS
 TUXBOX_APPS_DIRECTORY
 TUXBOX_APPS_DVB
-TUXBOX_BOXTYPE
 
 PKG_CHECK_MODULES(FREETYPE, [freetype2])
 PKG_CHECK_MODULES(TUXTXT, tuxbox-tuxtxt)
+
+AC_ARG_WITH(boxtype,
+	[  --with-boxtype=NAME box type [[none,dm800...]]],
+	[BOXTYPE="$withval"],[BOXTYPE="dm800"])
+AC_SUBST(BOXTYPE)
+AC_DEFINE_UNQUOTED(BOXTYPE,"$BOXTYPE",[box type])
 
 AC_ARG_WITH(textlcd,
         AC_HELP_STRING([--with-textlcd], [use ascii based lcd, yes or no]),
