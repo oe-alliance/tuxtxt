@@ -1211,15 +1211,17 @@ void *tuxtxt_CacheThread(void *arg)
 		if (!tuxtxt_cache.receiving) continue;
 
 		/* read packet */
-		ssize_t readcnt;
-		readcnt = read(tuxtxt_cache.dmx, &pes_packet, sizeof(pes_packet));
+		ssize_t readcnt = read(tuxtxt_cache.dmx, &pes_packet, sizeof(pes_packet));
 
 		if (readcnt != sizeof(pes_packet))
 		{
 			if (tuxtxt_cache.debug)
-				printf ("TuxTxt: readerror\n");
+				printf ("TuxTxt: readerror readcnt=%d /pes_packet %d\n",readcnt,sizeof(pes_packet));
 			continue;
 		}
+
+		if (tuxtxt_cache.debug)
+			printf ("TuxTxt: read OK\n");
 
 		/* analyze it */
 		for (line = 0; line < 4; line++)
