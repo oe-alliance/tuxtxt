@@ -25,6 +25,10 @@
 
 void writeproc(const char* dest, const char *value);
 
+#ifndef FB_DEV
+# define FB_DEV "/dev/fb/0"
+#endif
+
 const char *ObjectSource[] =
 {
 	"(illegal)",
@@ -62,16 +66,16 @@ tstPageAttr tuxtxt_atrtable[] =
 	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MSGDRM3 */
 	{ tuxtxt_color_menu1  , tuxtxt_color_blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL0 5a Z */
 	{ tuxtxt_color_white  , tuxtxt_color_blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL1 58 X */
-	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b › */
-	{ tuxtxt_color_menu2  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab « */
-	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 ¤ */
-	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b › */
-	{ tuxtxt_color_menu2  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb Ë */
-	{ tuxtxt_color_cyan   , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 Ç */
-	{ tuxtxt_color_white  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 È */
-	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 ¨ */
-	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 ¤ */
-	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 ¨ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b Ãµ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab Â´ */
+	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 Â§ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b Ãµ */
+	{ tuxtxt_color_menu2  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb Ã€ */
+	{ tuxtxt_color_cyan   , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 Â« */
+	{ tuxtxt_color_white  , tuxtxt_color_menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 Â» */
+	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 Â® */
+	{ tuxtxt_color_yellow , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 Â§ */
+	{ tuxtxt_color_white  , tuxtxt_color_menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 Â® */
 };
 
 // G2 Set as defined in ETS 300 706
@@ -872,9 +876,8 @@ void tuxtxt_decode_btt()
 		b1 = b1<<8 | b2<<4 | b3; /* page number */
 		tuxtxt_cache.adippg[++tuxtxt_cache.maxadippg] = b1;
 	}
-#if DEBUG
-	printf("TuxTxt <BTT decoded>\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt <BTT decoded>\n");
 	tuxtxt_cache.bttok = 1;
 }
 
@@ -937,9 +940,8 @@ void tuxtxt_decode_adip() /* additional information table */
 			}
 		} /* next link j */
 		tuxtxt_cache.adippg[i] = 0; /* completely decoded: clear entry */
-#if DEBUG
-		printf("TuxTxt <ADIP %03x decoded>\n", p);
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <ADIP %03x decoded>\n", p);
 	} /* next adip page i */
 
 	while (!tuxtxt_cache.adippg[tuxtxt_cache.maxadippg] && (tuxtxt_cache.maxadippg >= 0)) /* and shrink table */
@@ -952,7 +954,6 @@ int tuxtxt_GetSubPage(int page, int subpage, int offset)
 {
 	int loop;
 
-
 	for (loop = subpage + offset; loop != subpage; loop += offset)
 	{
 		if (loop < 0)
@@ -964,16 +965,14 @@ int tuxtxt_GetSubPage(int page, int subpage, int offset)
 
 		if (tuxtxt_cache.astCachetable[page][loop])
 		{
-#if DEBUG
-			printf("TuxTxt <NextSubPage: %.3X-%.2X>\n", page, subpage);
-#endif
+			if (tuxtxt_cache.debug)
+				printf("TuxTxt <NextSubPage: %.3X-%.2X>\n", page, subpage);
 			return loop;
 		}
 	}
 
-#if DEBUG
-	printf("TuxTxt <NextSubPage: no other SubPage>\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt <NextSubPage: no other SubPage>\n");
 	return subpage;
 }
 
@@ -1043,9 +1042,8 @@ void tuxtxt_clear_cache()
 	}
 	memset(&tuxtxt_cache.astCachetable, 0, sizeof(tuxtxt_cache.astCachetable));
 	memset(&tuxtxt_cache.astP29, 0, sizeof(tuxtxt_cache.astP29));
-#if DEBUG
-	printf("TuxTxt cache cleared\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt cache cleared\n");
 	pthread_mutex_unlock(&tuxtxt_cache_lock);
 }
 /******************************************************************************
@@ -1067,9 +1065,8 @@ int tuxtxt_init_demuxer()
 		perror("TuxTxt <DMX_SET_BUFFERSIZE>");
 		return 0;
 	}
-#if DEBUG
-	printf("TuxTxt: initialized\n");
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt: initialized\n");
 	/* init successfull */
 
 	return 1;
@@ -1087,9 +1084,8 @@ void tuxtxt_decode_p2829(unsigned char *vtxt_row, tstExtData **ptExtData)
 
 	if (t1 < 0 || t2 < 0)
 	{
-#if DEBUG
-		printf("TuxTxt <Biterror in p28>\n");
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <Biterror in p28>\n");
 		return;
 	}
 
@@ -1125,9 +1121,8 @@ void tuxtxt_decode_p2829(unsigned char *vtxt_row, tstExtData **ptExtData)
 	}
 	if (t2 < 0 || bitsleft != 14)
 	{
-#if DEBUG
-		printf("TuxTxt <Biterror in p28/29 t2=%d b=%d>\n", t2, bitsleft);
-#endif
+		if (tuxtxt_cache.debug)
+			printf("TuxTxt <Biterror in p28/29 t2=%d b=%d>\n", t2, bitsleft);
 		(*ptExtData)->p28Received = 0;
 		return;
 	}
@@ -1200,7 +1195,8 @@ void *tuxtxt_CacheThread(void *arg)
 	unsigned char pagedata[9][23*40];
 	tstPageinfo *pageinfo_thread;
 
-	printf("TuxTxt running thread...(%03x)\n",tuxtxt_cache.vtxtpid);
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt running thread...(%03x)\n",tuxtxt_cache.vtxtpid);
 	tuxtxt_cache.receiving = 1;
 	nice(3);
 	while (1)
@@ -1211,14 +1207,12 @@ void *tuxtxt_CacheThread(void *arg)
 		if (!tuxtxt_cache.receiving) continue;
 
 		/* read packet */
-		ssize_t readcnt;
-		readcnt = read(tuxtxt_cache.dmx, &pes_packet, sizeof(pes_packet));
+		ssize_t readcnt = read(tuxtxt_cache.dmx, &pes_packet, sizeof(pes_packet));
 
 		if (readcnt != sizeof(pes_packet))
 		{
-#if DEBUG
-			printf ("TuxTxt: readerror\n");
-#endif
+			if (tuxtxt_cache.debug)
+				printf ("TuxTxt: readerror readcnt=%d /pes_packet %d\n",readcnt,sizeof(pes_packet));
 			continue;
 		}
 
@@ -1244,9 +1238,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 				if (b1 == 0xFF || b2 == 0xFF)
 				{
-#if DEBUG
-					printf("TuxTxt <Biterror in Packet>\n");
-#endif
+					if (tuxtxt_cache.debug)
+						printf("TuxTxt <Biterror in Packet>\n");
 					continue;
 				}
 
@@ -1273,9 +1266,8 @@ void *tuxtxt_CacheThread(void *arg)
 					if (b2 == 0xFF || b3 == 0xFF)
 					{
 						tuxtxt_cache.current_page[magazine] = tuxtxt_cache.page_receiving = -1;
-#if DEBUG
-						printf("TuxTxt <Biterror in Page>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in Page>\n");
 						continue;
 					}
 
@@ -1295,9 +1287,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 					if (b1 == 0xFF || b2 == 0xFF || b3 == 0xFF || b4 == 0xFF)
 					{
-#if DEBUG
-						printf("TuxTxt <Biterror in SubPage>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in SubPage>\n");
 						tuxtxt_cache.current_subpage[magazine] = -1;
 						continue;
 					}
@@ -1354,9 +1345,8 @@ void *tuxtxt_CacheThread(void *arg)
 					b1 = dehamming[vtxt_row[9]];
 					if (b1 == 0xFF)
 					{
-#if DEBUG
-						printf("TuxTxt <Biterror in CountryFlags>\n");
-#endif
+						if (tuxtxt_cache.debug)
+							printf("TuxTxt <Biterror in CountryFlags>\n");
 					}
 					else
 					{
@@ -1436,9 +1426,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p27>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p27>\n");
 							continue;
 						}
 						if (descode == 0) // reading FLOF-Pagelinks
@@ -1526,9 +1515,8 @@ void *tuxtxt_CacheThread(void *arg)
 								int d2 = deh24(&vtxt_row[6*i + 6]);
 								if (d1 < 0 || d2 < 0)
 								{
-#if DEBUG
-									printf("TuxTxt <Biterror in p27/4-5>\n");
-#endif
+									if (tuxtxt_cache.debug)
+										printf("TuxTxt <Biterror in p27/4-5>\n");
 									continue;
 								}
 								p->local = i & 0x01;
@@ -1549,7 +1537,8 @@ void *tuxtxt_CacheThread(void *arg)
 								{
 									// workaround for crash on RTL Shop ...
 									// sorry.. i dont understand whats going wrong here :)
-									printf("[TuxTxt] page > 0x899 ... ignore!!!!!!\n");
+									if (tuxtxt_cache.debug)
+										printf("[TuxTxt] page > 0x899 ... ignore!!!!!!\n");
 									continue;
 								}
 								else if (tuxtxt_cache.astCachetable[p->page][0])	/* link valid && linked page cached */
@@ -1571,9 +1560,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p26>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p26>\n");
 							continue;
 						}
 						if (!pageinfo_thread->ext)
@@ -1607,9 +1595,8 @@ void *tuxtxt_CacheThread(void *arg)
 
 						if (descode == 0xff)
 						{
-#if DEBUG
-							printf("TuxTxt <Biterror in p28>\n");
-#endif
+							if (tuxtxt_cache.debug)
+								printf("TuxTxt <Biterror in p28>\n");
 							continue;
 						}
 						if (descode != 2)
@@ -1723,9 +1710,8 @@ int tuxtxt_start_thread()
 		tuxtxt_cache.thread_id = 0;
 		return 0;
 	}
-#if 1//DEBUG
-	printf("TuxTxt service started %x\n", tuxtxt_cache.vtxtpid);
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt service started %x\n", tuxtxt_cache.vtxtpid);
 	tuxtxt_cache.receiving = 1;
 	tuxtxt_cache.thread_starting = 0;
 	return 1;
@@ -1759,9 +1745,8 @@ int tuxtxt_stop_thread()
 		close(tuxtxt_cache.dmx);
 	}
 	tuxtxt_cache.dmx = -1;
-#if 1//DEBUG
-	printf("TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
-#endif
+	if (tuxtxt_cache.debug)
+		printf("TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
 	return 1;
 }
 
@@ -4004,12 +3989,12 @@ int tuxtxt_RenderChar(unsigned char *lfb, // pointer to render buffer, min. font
 			tuxtxt_FillRect(lfb,xres,*pPosX + curfontwidth/2, PosY, (curfontwidth+1)/2, fontheight, bgcolor);
 			*pPosX += curfontwidth;
 			return 0;
-		case 0xEA: /* °  */
+		case 0xEA: /* âˆž */
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY, curfontwidth, fontheight, bgcolor);
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY, curfontwidth/2, curfontwidth/2, fgcolor);
 			*pPosX += curfontwidth;
 			return 0;
-		case 0xEB: /* ¬ */
+		case 0xEB: /* Â¨ */
 			tuxtxt_FillRect(lfb,xres,*pPosX, PosY +1, curfontwidth, fontheight -1, bgcolor);
 			for (Row=0; Row < curfontwidth/2; Row++)
 				tuxtxt_DrawHLine(lfb,xres,*pPosX + Row, PosY + Row, curfontwidth - Row, fgcolor);
@@ -4069,6 +4054,11 @@ int tuxtxt_RenderChar(unsigned char *lfb, // pointer to render buffer, min. font
 #define PIG "/dev/v4l/video0"
 #endif
 
+#define SCALE_UP_X   renderinfo->var_screeninfo.xres/720
+#define SCALE_UP_Y   renderinfo->var_screeninfo.yres/576
+#define SCALE_DOWN_X 720/renderinfo->var_screeninfo.xres
+#define SCALE_DOWN_Y 576/renderinfo->var_screeninfo.yres
+
 #define TOPMENUSTARTX TV43STARTX+2
 #define TOPMENUENDX TVENDX
 #define TOPMENUSTARTY renderinfo->StartY
@@ -4081,12 +4071,12 @@ int tuxtxt_RenderChar(unsigned char *lfb, // pointer to render buffer, min. font
 #define TOPMENUSPC 0
 #define TOPMENUCHARS (TOPMENUINDENTDEF+12+TOPMENUSPC+4)
 
-#define TV43STARTX (renderinfo->ex - 146) //(renderinfo->StartX + 2 + (40-renderinfo->nofirst)*renderinfo->fontwidth_topmenumain + (40*renderinfo->fontwidth_topmenumain/abx))
-#define TV169FULLSTARTX (renderinfo->sx+ 8*40) //(renderinfo->sx +(renderinfo->ex +1 - renderinfo->sx)/2)
+#define TV43STARTX (renderinfo->ex - 146*SCALE_UP_X) //(renderinfo->StartX + 2 + (40-renderinfo->nofirst)*renderinfo->fontwidth_topmenumain + (40*renderinfo->fontwidth_topmenumain/abx))
+#define TV169FULLSTARTX (renderinfo->sx+ 8*40*SCALE_UP_X) //(renderinfo->sx +(renderinfo->ex +1 - renderinfo->sx)/2)
 #define TVENDX renderinfo->ex
 #define TVENDY (renderinfo->StartY + 25*renderinfo->fontheight)
-#define TV43WIDTH 144 /* 120 */
-#define TV43HEIGHT 116 /* 96 */
+#define TV43WIDTH 144*SCALE_UP_X /* 120 */
+#define TV43HEIGHT 116*SCALE_UP_Y /* 96 */
 #define TV43STARTY (TVENDY - TV43HEIGHT)
 #define TV169FULLSTARTY renderinfo->sy
 #define TV169FULLWIDTH  (renderinfo->ex - renderinfo->sx)/2
@@ -4094,9 +4084,11 @@ int tuxtxt_RenderChar(unsigned char *lfb, // pointer to render buffer, min. font
 
 /* fonts */
 #define TUXTXTTTF FONTDIR "/tuxtxt.ttf"
+#define TUXTXTTTFNONBOLD FONTDIR "/tuxtxt_nonbold.ttf"
 #define TUXTXTOTB FONTDIR "/tuxtxt.otb"
 /* alternative fontdir */
 #define TUXTXTTTFVAR "/var/tuxtxt/tuxtxt.ttf"
+#define TUXTXTTTFVARNONBOLD "/var/tuxtxt/tuxtxt_nonbold.ttf"
 #define TUXTXTOTBVAR "/var/tuxtxt/tuxtxt.otb"
 
 int tuxtxt_toptext_getnext(int startpage, int up, int findgroup)
@@ -4582,10 +4574,10 @@ void tuxtxt_SwitchScreenMode(tstRenderInfo* renderinfo,int newscreenmode)
 			int val = 0;
 			switch (i)
 			{
-			case 0: val = tx; break;
-			case 1: val = ty; break;
-			case 2: val = tw; break;
-			case 3: val = th; break;
+			case 0: val = tx*SCALE_DOWN_X; break;
+			case 1: val = ty*SCALE_DOWN_Y; break;
+			case 2: val = tw*SCALE_DOWN_X; break;
+			case 3: val = th*SCALE_DOWN_Y; break;
 			case 4: val = 1; break;
 			}
 			fprintf(f, "%08x\n", val);
@@ -5428,6 +5420,9 @@ void tuxtxt_SetRenderingDefaults(tstRenderInfo* renderinfo)
 	renderinfo->showflof        = 1;
 	renderinfo->show39          = 1;
 	renderinfo->showl25         = 1;
+	renderinfo->TTFScreenResX   = 720;
+	renderinfo->TTFBold         = 1;
+	renderinfo->CleanAlgo       = 0;
 	renderinfo->TTFWidthFactor16  = 28;
 	renderinfo->TTFHeightFactor16 = 15;
 	renderinfo->color_mode   = 10;
@@ -5511,10 +5506,10 @@ int tuxtxt_InitRendering(tstRenderInfo* renderinfo,int setTVFormat)
 	if (renderinfo->usettf)
 	{
 #if ((defined(FREETYPE_MAJOR)) && (((FREETYPE_MAJOR == 2) && (((FREETYPE_MINOR == 1) && (FREETYPE_PATCH >= 9)) || (FREETYPE_MINOR > 1))) || (FREETYPE_MAJOR > 2)))
-		renderinfo->typettf.face_id = (FTC_FaceID) TUXTXTTTFVAR;
+		renderinfo->typettf.face_id = renderinfo->TTFBold ? (FTC_FaceID) TUXTXTTTFVAR : (FTC_FaceID) TUXTXTTTFVARNONBOLD;
 		renderinfo->typettf.height = (FT_UShort) renderinfo->fontheight * renderinfo->TTFHeightFactor16 / 16;
 #else
-		renderinfo->typettf.font.face_id = (FTC_FaceID) TUXTXTTTFVAR;
+		renderinfo->typettf.font.face_id = renderinfo->TTFBold ? (FTC_FaceID) TUXTXTTTFVAR : (FTC_FaceID) TUXTXTTTFVARNONBOLD;
 		renderinfo->typettf.font.pix_height = (FT_UShort) renderinfo->fontheight * renderinfo->TTFHeightFactor16 / 16;
 #endif
 	}
@@ -5535,14 +5530,14 @@ int tuxtxt_InitRendering(tstRenderInfo* renderinfo,int setTVFormat)
 	renderinfo->typettf.flags = FT_LOAD_MONOCHROME;
 	if ((error = FTC_Manager_LookupFace(renderinfo->manager, renderinfo->typettf.face_id, &renderinfo->face)))
 	{
-		renderinfo->typettf.face_id = (renderinfo->usettf ? (FTC_FaceID) TUXTXTTTF : TUXTXTOTB);
+		renderinfo->typettf.face_id = (renderinfo->usettf ? (renderinfo->TTFBold ? (FTC_FaceID) TUXTXTTTF : (FTC_FaceID) TUXTXTTTFNONBOLD) : TUXTXTOTB);
 		if ((error = FTC_Manager_LookupFace(renderinfo->manager, renderinfo->typettf.face_id, &renderinfo->face)))
 		{
 #else
 	renderinfo->typettf.image_type = ftc_image_mono;
 	if ((error = FTC_Manager_Lookup_Face(renderinfo->manager, renderinfo->typettf.font.face_id, &renderinfo->face)))
 	{
-		renderinfo->typettf.font.face_id = (renderinfo->usettf ? (FTC_FaceID) TUXTXTTTF : TUXTXTOTB);
+		renderinfo->typettf.font.face_id = (renderinfo->usettf ? (renderinfo->TTFBold ? (FTC_FaceID) TUXTXTTTF : (FTC_FaceID) TUXTXTTTFNONBOLD) : TUXTXTOTB);
 		if ((error = FTC_Manager_Lookup_Face(renderinfo->manager, renderinfo->typettf.font.face_id, &renderinfo->face)))
 		{
 #endif
@@ -5568,11 +5563,91 @@ int tuxtxt_InitRendering(tstRenderInfo* renderinfo,int setTVFormat)
 		return 0;
 	}
 
-	/* change to PAL resolution */
-	if (renderinfo->var_screeninfo.xres != 720) 
+#if SCREENPATCH
+
+	/* get fixed screeninfo */
+	if (ioctl(renderinfo->fb, FBIOGET_FSCREENINFO, &renderinfo->fix_screeninfo) == -1)
 	{
-		renderinfo->var_screeninfo.xres_virtual = renderinfo->var_screeninfo.xres = 720;
-		renderinfo->var_screeninfo.yres_virtual = renderinfo->var_screeninfo.yres = 576;
+		perror("TuxTxt <FBIOGET_FSCREENINFO>");
+		FTC_Manager_Done(renderinfo->manager);
+		FT_Done_FreeType(renderinfo->library);
+		return 0;
+	}
+
+	/* map framebuffer into memory */
+	renderinfo->lfb = (unsigned char*)mmap(0, renderinfo->fix_screeninfo.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, renderinfo->fb, 0);
+	if (!renderinfo->lfb)
+	{
+		perror("TuxTxt <mmap>");
+		FTC_Manager_Done(renderinfo->manager);
+		FT_Done_FreeType(renderinfo->library);
+		return 0;
+	}
+
+	/* clear screen */
+	memset(renderinfo->lfb, 0, renderinfo->var_screeninfo.yres * renderinfo->fix_screeninfo.line_length);
+
+	/* unmap framebuffer */
+	msync(renderinfo->lfb, renderinfo->fix_screeninfo.smem_len, MS_SYNC);
+	munmap(renderinfo->lfb, renderinfo->fix_screeninfo.smem_len);
+
+#endif
+
+	/* change to PAL resolution */
+	/* or, when using TrueType fonts, pick PAL / HD / full-HD based on TTFScreenResX */
+
+	/* first save variable screeninfo */
+	renderinfo->saved_var_screeninfo = renderinfo->var_screeninfo;
+	
+	/* optionally save framebuffer */
+	if ((renderinfo->CleanAlgo == 1) || (renderinfo->CleanAlgo == 3) || (renderinfo->CleanAlgo == 4))
+	{
+		/* save fixed screeninfo */
+		if (ioctl(renderinfo->fb, FBIOGET_FSCREENINFO, &renderinfo->saved_fix_screeninfo) == -1)
+		{
+			perror("TuxTxt <FBIOGET_FSCREENINFO>");
+			FTC_Manager_Done(renderinfo->manager);
+			FT_Done_FreeType(renderinfo->library);
+			return 0;
+		}
+		
+		unsigned char *my_lfb;
+		my_lfb = (unsigned char*)mmap(0, renderinfo->saved_fix_screeninfo.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, renderinfo->fb, 0);
+		if (!my_lfb)
+		{
+			perror("TuxTxt <mmap>");
+			return 0;
+		}
+		renderinfo->saved_fb = malloc(renderinfo->saved_fix_screeninfo.smem_len);
+		memcpy(renderinfo->saved_fb, my_lfb, renderinfo->saved_fix_screeninfo.smem_len);
+		msync(renderinfo->saved_fb, renderinfo->saved_fix_screeninfo.smem_len, MS_SYNC);
+		munmap(my_lfb, renderinfo->saved_fix_screeninfo.smem_len);
+	}	
+
+	/* now switch resolution */
+	if ((!renderinfo->usettf) || (renderinfo->TTFScreenResX <= 720))
+	{
+		if (renderinfo->var_screeninfo.xres != 720) 
+		{
+			renderinfo->var_screeninfo.xres_virtual = renderinfo->var_screeninfo.xres = 720;
+			renderinfo->var_screeninfo.yres_virtual = renderinfo->var_screeninfo.yres = 576;
+		}
+	}
+	else if (renderinfo->TTFScreenResX <= 1280)
+	{
+		if (renderinfo->var_screeninfo.xres != 1280)
+		{
+			renderinfo->var_screeninfo.xres_virtual = renderinfo->var_screeninfo.xres = 1280;
+			renderinfo->var_screeninfo.yres_virtual = renderinfo->var_screeninfo.yres = 720;
+		}
+	}
+	else
+	{
+		if (renderinfo->var_screeninfo.xres != 1920) 
+		{
+			renderinfo->var_screeninfo.xres_virtual = renderinfo->var_screeninfo.xres = 1920;
+			renderinfo->var_screeninfo.yres_virtual = renderinfo->var_screeninfo.yres = 1080;
+		}
 	}
 
 	/* set variable screeninfo for double buffering */
@@ -5678,9 +5753,59 @@ void tuxtxt_EndRendering(tstRenderInfo* renderinfo)
 	renderinfo->manager = 0;
 	renderinfo->library = 0;
 	tuxtxt_ClearFB(renderinfo,renderinfo->previousbackcolor);
+#if SCREENPATCH
+	tuxtxt_ClearBB(renderinfo,renderinfo->previousbackcolor);
+#endif
 	/* unmap framebuffer */
 	msync(renderinfo->lfb, renderinfo->fix_screeninfo.smem_len, MS_SYNC);
 	munmap(renderinfo->lfb, renderinfo->fix_screeninfo.smem_len);
+
+	/* open Framebuffer again */
+	if ((renderinfo->fb=open(FB_DEV, O_RDWR)) == -1)
+	{
+		printf("TuxTxt <open %s>: %m", FB_DEV);
+		return 0;
+	}
+
+	if (renderinfo->CleanAlgo == 4) /* 4 = restore var_screeninfo then framebuffer */
+	{
+		/* restore var_screeninfo */
+		if (ioctl(renderinfo->fb, FBIOPUT_VSCREENINFO, &renderinfo->saved_var_screeninfo) == -1)
+		{
+			perror("TuxTxt <FBIOGET_VSCREENINFO>");
+			return 0;
+		}
+	}
+	
+	if ((renderinfo->CleanAlgo == 1) || (renderinfo->CleanAlgo == 3) || (renderinfo->CleanAlgo == 4)) /* 1 = restore framebuffer, 3 = framebuffer then var_screeninfo */
+	{
+		/* restore framebuffer */
+		unsigned char *my_lfb;
+		my_lfb = (unsigned char*)mmap(0, renderinfo->saved_fix_screeninfo.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, renderinfo->fb, 0);
+		if (!my_lfb)
+		{
+			perror("TuxTxt <mmap>");
+			return 0;
+		}
+		memcpy(my_lfb, renderinfo->saved_fb, renderinfo->saved_fix_screeninfo.smem_len);
+		msync(my_lfb, renderinfo->saved_fix_screeninfo.smem_len, MS_SYNC);
+		munmap(my_lfb, renderinfo->saved_fix_screeninfo.smem_len);
+		free(renderinfo->saved_fb);
+	}
+
+	if ((renderinfo->CleanAlgo == 2) || (renderinfo->CleanAlgo == 3)) /* 2 = restore var_screeninfo, 3 = framebuffer then var_screeninfo */
+	{
+		/* restore var_screeninfo */
+		if (ioctl(renderinfo->fb, FBIOPUT_VSCREENINFO, &renderinfo->saved_var_screeninfo) == -1)
+		{
+			perror("TuxTxt <FBIOGET_VSCREENINFO>");
+			return 0;
+		}
+	}
+	
+	/* close Framebuffer again */
+	close(renderinfo->fb);
+	
 	printf("[TTX] Rendering ended\n");
 }
 #endif
