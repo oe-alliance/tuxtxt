@@ -5764,7 +5764,7 @@ void tuxtxt_EndRendering(tstRenderInfo* renderinfo)
 	if ((renderinfo->fb=open(FB_DEV, O_RDWR)) == -1)
 	{
 		printf("TuxTxt <open %s>: %m", FB_DEV);
-		return 0;
+		return;
 	}
 
 	if (renderinfo->CleanAlgo == 4) /* 4 = restore var_screeninfo then framebuffer */
@@ -5773,7 +5773,7 @@ void tuxtxt_EndRendering(tstRenderInfo* renderinfo)
 		if (ioctl(renderinfo->fb, FBIOPUT_VSCREENINFO, &renderinfo->saved_var_screeninfo) == -1)
 		{
 			perror("TuxTxt <FBIOGET_VSCREENINFO>");
-			return 0;
+			return;
 		}
 	}
 	
@@ -5785,7 +5785,7 @@ void tuxtxt_EndRendering(tstRenderInfo* renderinfo)
 		if (!my_lfb)
 		{
 			perror("TuxTxt <mmap>");
-			return 0;
+			return;
 		}
 		memcpy(my_lfb, renderinfo->saved_fb, renderinfo->saved_fix_screeninfo.smem_len);
 		msync(my_lfb, renderinfo->saved_fix_screeninfo.smem_len, MS_SYNC);
@@ -5799,7 +5799,7 @@ void tuxtxt_EndRendering(tstRenderInfo* renderinfo)
 		if (ioctl(renderinfo->fb, FBIOPUT_VSCREENINFO, &renderinfo->saved_var_screeninfo) == -1)
 		{
 			perror("TuxTxt <FBIOGET_VSCREENINFO>");
-			return 0;
+			return;
 		}
 	}
 	
